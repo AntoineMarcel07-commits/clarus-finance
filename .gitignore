@@ -1,0 +1,7 @@
+/target/
+/config/application.properties
+.DS_Store
+nbactions.xml
+nb-configuration.xml
+*.log
+*.csv
