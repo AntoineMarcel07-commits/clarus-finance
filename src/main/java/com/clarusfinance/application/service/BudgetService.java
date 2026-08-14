@@ -58,7 +58,7 @@ public final class BudgetService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal ratio = spent.divide(budget.monthlyLimit(), 4, RoundingMode.HALF_UP);
         int percentage = ratio.multiply(BigDecimal.valueOf(100)).setScale(0, RoundingMode.HALF_UP).intValue();
-        BudgetStatus status = ratio.compareTo(BigDecimal.ONE) > 0
+        BudgetStatus status = spent.compareTo(budget.monthlyLimit()) > 0
                 ? BudgetStatus.EXCEEDED
                 : ratio.compareTo(WARNING_THRESHOLD) >= 0 ? BudgetStatus.WARNING : BudgetStatus.HEALTHY;
         return new BudgetProgress(
