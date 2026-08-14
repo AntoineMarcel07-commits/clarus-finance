@@ -1,65 +1,59 @@
-# Arquitectura básica
+# Arquitectura sencilla
 
-## Estructura
+## Flujo del programa
 
 ```text
-ClarusFinance
-      |
-      v
-VentanaPrincipal
-      |
-      v
-OperacionesFinanzas
-      |
-      v
-Finanzas ----> ArrayList<Movimiento>
+ClarusFinance -> ConexionBD -> PostgreSQL
+       |
+       v
+     Login -> MenuPrincipal
+                  |
+        +---------+----------+
+        |                    |
+        v                    v
+   Dashboard        Movimientos / Presupuestos
+        |                    |
+        +----> clases con JDBC directo
 ```
 
 ## Clases
 
-### ClarusFinance
+- `ClarusFinance`: clase `main`; pide la contraseña de PostgreSQL, conecta y abre el login.
+- `ConexionBD`: abre la conexión y crea las tablas si todavía no existen.
+- `Movimiento`: datos de un ingreso o gasto y métodos JDBC para insertar, consultar, actualizar y eliminar.
+- `Presupuesto`: datos de un límite por categoría y métodos JDBC para guardar, consultar y eliminar.
+- `CalculosFinanzas`: suma ingresos, gastos, saldo y determina el estado de un presupuesto.
+- `OperacionesCalculos`: interfaz pequeña con las operaciones matemáticas.
+- `Login`, `MenuPrincipal`, `Dashboard`, `MovimientosVentana` y `PresupuestosVentana`: JFrames de la aplicación.
 
-Es la clase `main`. Crea un objeto `Finanzas`, crea la ventana y la muestra. Sigue el mismo estilo usado en `AmazonMx`.
+`InfoMovimiento` e `InfoPresupuesto` conservan el patrón sencillo de los proyectos de clase: reciben datos, crean un objeto y lo devuelven.
 
-### Movimiento
+## Base de datos
 
-Tiene campos públicos sencillos:
+```text
+movimientos
+- id, tipo, descripcion, categoria, monto, fecha
 
-- `id`
-- `fecha`
-- `tipo`
-- `categoria`
-- `descripcion`
-- `monto`
+presupuestos
+- id, categoria, limite
+```
 
-El método `InfoMovimiento` crea y devuelve un movimiento. Es el mismo patrón usado en `InfoClientes`, `InfoPedidos` e `InfoProductos` de otros proyectos.
-
-### Finanzas
-
-Contiene un `ArrayList<Movimiento>` y métodos directos para agregar, eliminar y calcular totales.
-
-### OperacionesFinanzas
-
-Es una interfaz pequeña. Funciona como una lista de métodos que la clase `Finanzas` debe tener. Se conserva solamente para demostrar SOLID de forma sencilla.
-
-### VentanaPrincipal
-
-Es un JFrame. Lee los campos cuando se pulsa **AGREGAR**, muestra el `ArrayList` en una tabla y llama a los métodos de `Finanzas`.
+La categoría de un presupuesto es única. Si se vuelve a guardar la misma categoría, PostgreSQL actualiza su límite. Todas las consultas que reciben valores del usuario usan `PreparedStatement`.
 
 ## SOLID explicado fácil
 
-- **Responsabilidad única:** `Movimiento` guarda datos, `Finanzas` calcula y la ventana muestra.
-- **Abierto/cerrado:** se puede crear otra clase con las mismas operaciones sin cambiar la interfaz.
-- **Sustitución:** otra implementación de `OperacionesFinanzas` puede ocupar el lugar de `Finanzas`.
-- **Segregación:** la interfaz solo contiene las seis operaciones que usa la ventana.
-- **Inversión de dependencias:** la ventana recibe `OperacionesFinanzas` en el constructor.
+- **Responsabilidad única:** la conexión, los datos, los cálculos y las ventanas están separados.
+- **Abierto/cerrado:** se puede agregar otra implementación de cálculos sin modificar la interfaz.
+- **Sustitución:** cualquier implementación correcta de `OperacionesCalculos` puede reemplazar a `CalculosFinanzas`.
+- **Segregación:** la interfaz solo contiene cinco operaciones necesarias para el dashboard.
+- **Inversión de dependencias:** el objeto global de cálculos está declarado como `OperacionesCalculos`, no como una implementación fija.
 
 ## Clean code
 
-- Nombres sencillos en español.
-- Métodos cortos: `agregar`, `eliminar`, `saldo`.
-- Una sola lista de movimientos.
-- Validación simple del monto y los textos.
-- Sin contraseñas dentro del código.
+- Nombres directos en español.
+- Métodos pequeños para guardar, listar, calcular y validar.
+- Validación de textos, monto positivo y fecha.
+- Contraseña de PostgreSQL solicitada en cada inicio; no está en Git.
+- Sin frameworks, capas de servicios ni patrones difíciles de explicar.
 
-Esta arquitectura cumple la rúbrica sin intentar parecer un sistema profesional o empresarial.
+Es una aplicación intermedia: ofrece persistencia y varias pantallas, pero sigue siendo entendible para una exposición escolar.

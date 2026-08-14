@@ -1,5 +1,17 @@
 # Historial de cambios
 
+## 2.0.0 - 14 de agosto de 2026
+
+- Conexión real a PostgreSQL mediante JDBC.
+- Solicitud segura de la contraseña local al iniciar.
+- Inicio de sesión sencillo.
+- CRUD de ingresos y gastos.
+- Presupuestos por categoría con actualización y eliminación.
+- Dashboard con totales, saldo, últimos movimientos y alertas.
+- Tablas creadas automáticamente al conectarse.
+- 9 pruebas unitarias para cálculos y objetos principales.
+- Manual de usuario e instalación actualizado.
+
 ## 1.2.0 - 14 de agosto de 2026
 
 - Código adaptado al estilo de los proyectos existentes de NetBeans.

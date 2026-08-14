@@ -1,32 +1,33 @@
 # Clarus Finance
 
-Proyecto sencillo de Java Swing hecho con el mismo estilo de los proyectos básicos de NetBeans. Permite agregar ingresos y gastos, verlos en una tabla, eliminarlos y calcular el saldo.
+Aplicación escolar de escritorio para controlar finanzas personales. Está hecha con Java Swing, Maven y JDBC directo, siguiendo el estilo sencillo de un proyecto de NetBeans. Los datos se guardan en PostgreSQL.
 
 ## Funciones
 
-- Agregar un ingreso o gasto.
-- Escribir descripción, categoría y monto.
-- Mostrar movimientos en una tabla.
-- Sumar ingresos y gastos.
-- Calcular el saldo.
-- Eliminar un movimiento.
-
-Los movimientos se guardan en un `ArrayList` mientras el programa está abierto. Al cerrar la aplicación, la lista empieza de nuevo. Esto mantiene el proyecto fácil de entender y presentar.
+- Inicio de sesión sencillo (`admin` / `1234`).
+- Alta, consulta, edición y eliminación de ingresos y gastos.
+- Presupuestos por categoría.
+- Dashboard con ingresos, gastos, saldo y últimos movimientos.
+- Avisos de presupuesto: disponible, cerca del límite o excedido.
+- Persistencia en PostgreSQL.
 
 ## Requisitos
 
 - JDK 17 o superior.
-- Apache NetBeans con soporte Maven.
+- Apache NetBeans con Maven, o Maven 3.9+.
+- PostgreSQL 14 o superior ejecutándose en `localhost:5432`.
+- Usuario de PostgreSQL llamado `postgres`.
 
-No necesita PostgreSQL ni archivos de configuración.
+## Instalación rápida
 
-## Abrir en NetBeans
+1. En pgAdmin, abre **Query Tool** sobre la base `postgres`.
+2. Ejecuta `database/crear_base.sql` una sola vez.
+3. Abre la carpeta `ClarusFinance` en NetBeans.
+4. Ejecuta `clarus.finance.ClarusFinance`.
+5. Escribe la contraseña local del usuario `postgres` cuando la aplicación la solicite.
+6. Entra con usuario `admin` y contraseña `1234`.
 
-1. Abre NetBeans.
-2. Selecciona **File > Open Project**.
-3. Elige la carpeta `ClarusFinance`.
-4. Espera a que Maven termine de cargar.
-5. Ejecuta `clarus.finance.ClarusFinance`.
+La contraseña de PostgreSQL no está escrita ni guardada dentro del proyecto. Las tablas `movimientos` y `presupuestos` se crean automáticamente en el primer inicio.
 
 ## Ejecutar desde terminal
 
@@ -35,26 +36,26 @@ mvn clean package
 java -jar target/ClarusFinance.jar
 ```
 
-## Código principal
-
-El programa tiene únicamente 5 archivos de producción:
+## Estructura sencilla
 
 ```text
 src/main/java/
 ├── clarus/finance/
 │   ├── ClarusFinance.java
+│   ├── ConexionBD.java
 │   ├── Movimiento.java
-│   ├── Finanzas.java
-│   └── OperacionesFinanzas.java
+│   ├── Presupuesto.java
+│   ├── CalculosFinanzas.java
+│   └── OperacionesCalculos.java
 └── Interfaces/
-    └── VentanaPrincipal.java
+    ├── Login.java
+    ├── MenuPrincipal.java
+    ├── Dashboard.java
+    ├── MovimientosVentana.java
+    └── PresupuestosVentana.java
 ```
 
-- `ClarusFinance`: crea los objetos y abre la ventana.
-- `Movimiento`: contiene campos públicos, igual que las clases de tus otros proyectos.
-- `Finanzas`: usa un `ArrayList` y realiza las operaciones.
-- `OperacionesFinanzas`: interfaz pequeña para demostrar SOLID.
-- `VentanaPrincipal`: JFrame con campos, tabla y botones.
+`Movimiento` y `Presupuesto` contienen consultas JDBC directas; `CalculosFinanzas` hace las cuentas; las ventanas muestran y capturan información. No se usan frameworks, repositorios genéricos ni una arquitectura complicada.
 
 ## Pruebas unitarias
 
@@ -62,20 +63,21 @@ src/main/java/
 mvn clean test
 ```
 
-Hay 7 pruebas directas en `FinanzasTest.java`. No usan base de datos ni abren ventanas.
+Hay 9 pruebas directas en `CalculosFinanzasTest.java`. No abren ventanas ni requieren PostgreSQL.
 
-## SOLID básico
+## SOLID y clean code
 
-- **S:** cada clase tiene una tarea.
-- **O y L:** otra clase puede implementar `OperacionesFinanzas`.
-- **I:** la interfaz contiene solo las operaciones necesarias.
-- **D:** la ventana usa la interfaz en vez de depender directamente de `Finanzas`.
-
-No se usan repositorios, capas, patrones empresariales, seguridad avanzada ni archivos CSV.
+- Cada clase tiene una responsabilidad clara.
+- `OperacionesCalculos` es una interfaz pequeña.
+- `ClarusFinance` declara los cálculos mediante esa interfaz y usa `CalculosFinanzas` como implementación.
+- Las consultas usan `PreparedStatement`.
+- Los nombres y métodos están en español y son fáciles de seguir.
+- La contraseña de PostgreSQL se pide al iniciar y no se versiona.
 
 ## Documentación
 
-- `docs/Manual_Usuario_Clarus_Finance.pdf`: manual e instalación.
+- `docs/Manual_Usuario_Clarus_Finance.pdf`: manual completo e instalación.
+- `docs/MANUAL_USUARIO.md`: manual en texto.
 - `docs/ARQUITECTURA.md`: explicación del código y SOLID.
 - `docs/PRUEBAS.md`: explicación de las pruebas.
 - `docs/VERSIONADO.md`: Git y versiones.

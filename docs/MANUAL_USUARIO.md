@@ -1,71 +1,89 @@
 # Clarus Finance - Manual de usuario e instalación
 
-Versión 1.2.0 - 14 de agosto de 2026
+Versión 2.0.0 - 14 de agosto de 2026
 
 ## 1. Descripción
 
-Clarus Finance es una aplicación escolar de Java Swing. Permite agregar ingresos y gastos, mostrarlos en una tabla, eliminarlos y calcular el saldo.
+Clarus Finance es una aplicación escolar de Java Swing para administrar finanzas personales. Guarda ingresos, gastos y presupuestos en PostgreSQL. Además, presenta totales y alertas en un dashboard.
 
 ## 2. Requisitos
 
 - JDK 17 o superior.
-- Apache NetBeans con Maven.
+- Apache NetBeans con Maven, o Maven 3.9+.
+- PostgreSQL 14 o superior.
+- Usuario local de PostgreSQL llamado `postgres`.
 - Windows, macOS o Linux.
 
-No necesita PostgreSQL.
+## 3. Preparar PostgreSQL
 
-## 3. Instalación
+1. Inicia el servicio de PostgreSQL.
+2. Abre pgAdmin e ingresa con tu contraseña.
+3. Selecciona la base `postgres` y abre **Query Tool**.
+4. Ejecuta el archivo `database/crear_base.sql`.
+5. Comprueba que aparezca la base `clarus_finance`.
+
+No debes crear las tablas manualmente: la aplicación crea `movimientos` y `presupuestos` en el primer inicio.
+
+## 4. Abrir y ejecutar
 
 1. Descomprime el proyecto.
-2. Abre Apache NetBeans.
-3. Selecciona **File > Open Project**.
-4. Elige la carpeta `ClarusFinance`.
-5. Espera a que Maven termine de cargar.
-6. Ejecuta la clase `clarus.finance.ClarusFinance`.
+2. En NetBeans selecciona **File > Open Project**.
+3. Abre la carpeta `ClarusFinance` y espera a que Maven cargue.
+4. Ejecuta la clase `clarus.finance.ClarusFinance`.
+5. Escribe tu contraseña local de PostgreSQL en la primera ventana.
+6. Inicia sesión con usuario `admin` y contraseña `1234`.
 
-## 4. Registrar un movimiento
+También puedes ejecutar:
 
-1. Escribe una descripción.
-2. Escribe una categoría.
-3. Selecciona `Ingreso` o `Gasto`.
-4. Escribe un monto mayor a cero.
-5. Pulsa **AGREGAR**.
+```bash
+mvn clean package
+java -jar target/ClarusFinance.jar
+```
 
-## 5. Eliminar
+## 5. Menú principal
 
-Selecciona una fila y pulsa **ELIMINAR**.
+- **Dashboard:** muestra ingresos, gastos, saldo, últimos movimientos y presupuestos.
+- **Movimientos:** administra ingresos y gastos.
+- **Presupuestos:** administra límites por categoría.
+- **Cerrar sesión:** vuelve al login.
 
-## 6. Totales
+## 6. Movimientos
 
-- Ingresos: suma los movimientos de tipo `Ingreso`.
-- Gastos: suma los movimientos de tipo `Gasto`.
-- Saldo: ingresos menos gastos.
+Para agregar, completa descripción, categoría, tipo, monto y fecha `AAAA-MM-DD`; luego pulsa **AGREGAR**.
 
-## 7. Datos temporales
+Para editar, selecciona una fila, cambia los datos y pulsa **ACTUALIZAR**. Para borrar, selecciona una fila y pulsa **ELIMINAR**; el programa pide confirmación.
 
-Los movimientos viven en un `ArrayList` mientras el programa está abierto. Al cerrar la aplicación, la lista se borra. Esto evita instalaciones y código de almacenamiento avanzado.
+## 7. Presupuestos
 
-## 8. Pruebas
+Escribe una categoría y un límite mayor a cero. **GUARDAR / ACTUALIZAR** crea el presupuesto o actualiza el límite si esa categoría ya existe. Una fila seleccionada también se puede eliminar.
+
+El dashboard compara los gastos de cada categoría con su límite:
+
+- `Disponible`: menos de 80 % usado.
+- `Cerca del límite`: de 80 % a 100 % usado.
+- `Excedido`: gasto mayor al límite.
+
+## 8. Datos y seguridad
+
+Los datos permanecen en la base `clarus_finance` aunque cierres el programa. La contraseña de PostgreSQL solo se usa para abrir la conexión durante esa ejecución; no se guarda en el código ni en Git.
+
+El login `admin` / `1234` es demostrativo para una tarea escolar, no un sistema de seguridad para producción.
+
+## 9. Pruebas
 
 ```bash
 mvn clean test
 ```
 
-El resultado correcto muestra 7 pruebas y 0 fallos.
-
-## 9. Explicación rápida
-
-- `Movimiento` guarda los datos.
-- `Finanzas` contiene el ArrayList y hace las cuentas.
-- `VentanaPrincipal` es el JFrame.
-- `ClarusFinance` abre el programa.
-- `OperacionesFinanzas` es la interfaz sencilla usada para demostrar SOLID.
+El resultado correcto muestra 9 pruebas y 0 fallos. Estas pruebas revisan cálculos, estados de presupuesto y creación de objetos sin necesitar una base de datos.
 
 ## 10. Problemas comunes
 
-- Si no abre, revisa que NetBeans use JDK 17.
-- Si no agrega, completa todos los campos.
-- Si el monto falla, escribe únicamente números.
-- Si no elimina, selecciona primero una fila.
+- **No conecta:** confirma que PostgreSQL esté activo en `localhost:5432`, que exista `clarus_finance` y que la contraseña sea correcta.
+- **La base ya existe:** no vuelvas a ejecutar `CREATE DATABASE`; continúa con la ejecución de la app.
+- **No guarda:** completa todos los campos y usa un monto mayor a cero.
+- **Fecha inválida:** usa el formato `AAAA-MM-DD`, por ejemplo `2026-08-14`.
+- **No actualiza o elimina:** primero selecciona una fila de la tabla.
+- **No abre el JAR:** verifica que Java 17 esté instalado.
 
 Repositorio: <https://github.com/AntoineMarcel07-commits/clarus-finance>
