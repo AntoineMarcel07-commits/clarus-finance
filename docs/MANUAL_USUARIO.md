@@ -1,15 +1,15 @@
 # Clarus Finance - Manual de usuario e instalación
 
-Versión 2.0.0 - 14 de agosto de 2026
+Versión 3.0.0
 
 ## 1. Descripción
 
-Clarus Finance es una aplicación escolar de Java Swing para administrar finanzas personales. Guarda ingresos, gastos y presupuestos en PostgreSQL. Además, presenta totales y alertas en un dashboard.
+Clarus Finance es una aplicación escolar de Java Swing para administrar finanzas personales. Guarda ingresos, gastos y presupuestos en PostgreSQL. Además, presenta totales y alertas de presupuesto.
 
 ## 2. Requisitos
 
 - JDK 17 o superior.
-- Apache NetBeans con Maven, o Maven 3.9+.
+- Apache NetBeans.
 - PostgreSQL 14 o superior.
 - Usuario local de PostgreSQL llamado `postgres`.
 - Windows, macOS o Linux.
@@ -20,36 +20,37 @@ Clarus Finance es una aplicación escolar de Java Swing para administrar finanza
 2. Abre pgAdmin e ingresa con tu contraseña.
 3. Selecciona la base `postgres` y abre **Query Tool**.
 4. Ejecuta el archivo `database/crear_base.sql`.
-5. Comprueba que aparezca la base `clarus_finance`.
-
-No debes crear las tablas manualmente: la aplicación crea `movimientos` y `presupuestos` en el primer inicio.
+5. Actualiza la lista de bases y selecciona `ClarusFinance`.
+6. Abre otro **Query Tool** y ejecuta `database/ClarusFinance.sql`.
+7. Comprueba que aparezcan las tablas `movimientos` y `presupuestos`.
 
 ## 4. Abrir y ejecutar
 
 1. Descomprime el proyecto.
 2. En NetBeans selecciona **File > Open Project**.
-3. Abre la carpeta `ClarusFinance` y espera a que Maven cargue.
-4. Ejecuta la clase `clarus.finance.ClarusFinance`.
-5. Escribe tu contraseña local de PostgreSQL en la primera ventana.
-6. Inicia sesión con usuario `admin` y contraseña `1234`.
+3. Abre la carpeta `ClarusFinance`.
+4. Abre `src/clarus/finance/ClarusFinance.java`.
+5. Cambia `TU_CONTRASENA` por la contraseña de PostgreSQL.
+6. Pulsa **Run Project**.
+7. Inicia sesión con usuario `admin` y contraseña `1234`.
 
 También puedes ejecutar:
 
 ```bash
-mvn clean package
-java -jar target/ClarusFinance.jar
+ant clean jar
+java -jar dist/ClarusFinance.jar
 ```
 
 ## 5. Menú principal
 
-- **Dashboard:** muestra ingresos, gastos, saldo, últimos movimientos y presupuestos.
+- **Resumen:** muestra ingresos, gastos y saldo.
 - **Movimientos:** administra ingresos y gastos.
 - **Presupuestos:** administra límites por categoría.
 - **Cerrar sesión:** vuelve al login.
 
 ## 6. Movimientos
 
-Para agregar, completa descripción, categoría, tipo, monto y fecha `AAAA-MM-DD`; luego pulsa **AGREGAR**.
+Para agregar, completa descripción, categoría, tipo, monto y fecha `AAAA-MM-DD`; luego pulsa **GUARDAR**.
 
 Para editar, selecciona una fila, cambia los datos y pulsa **ACTUALIZAR**. Para borrar, selecciona una fila y pulsa **ELIMINAR**; el programa pide confirmación.
 
@@ -57,7 +58,7 @@ Para editar, selecciona una fila, cambia los datos y pulsa **ACTUALIZAR**. Para 
 
 Escribe una categoría y un límite mayor a cero. **GUARDAR / ACTUALIZAR** crea el presupuesto o actualiza el límite si esa categoría ya existe. Una fila seleccionada también se puede eliminar.
 
-El dashboard compara los gastos de cada categoría con su límite:
+La tabla de presupuestos compara los gastos de cada categoría con su límite:
 
 - `Disponible`: menos de 80 % usado.
 - `Cerca del límite`: de 80 % a 100 % usado.
@@ -65,24 +66,24 @@ El dashboard compara los gastos de cada categoría con su límite:
 
 ## 8. Datos y seguridad
 
-Los datos permanecen en la base `clarus_finance` aunque cierres el programa. La contraseña de PostgreSQL solo se usa para abrir la conexión durante esa ejecución; no se guarda en el código ni en Git.
+Los datos permanecen en la base `ClarusFinance` aunque cierres el programa. La aplicación usa una sola conexión para todas las consultas.
 
 El login `admin` / `1234` es demostrativo para una tarea escolar, no un sistema de seguridad para producción.
 
 ## 9. Pruebas
 
 ```bash
-mvn clean test
+ant clean test
 ```
 
 El resultado correcto muestra 9 pruebas y 0 fallos. Estas pruebas revisan cálculos, estados de presupuesto y creación de objetos sin necesitar una base de datos.
 
 ## 10. Problemas comunes
 
-- **No conecta:** confirma que PostgreSQL esté activo en `localhost:5432`, que exista `clarus_finance` y que la contraseña sea correcta.
+- **No conecta:** confirma que PostgreSQL esté activo en `localhost:5432`, que exista `ClarusFinance` y que cambiaste `TU_CONTRASENA`.
 - **La base ya existe:** no vuelvas a ejecutar `CREATE DATABASE`; continúa con la ejecución de la app.
 - **No guarda:** completa todos los campos y usa un monto mayor a cero.
-- **Fecha inválida:** usa el formato `AAAA-MM-DD`, por ejemplo `2026-08-14`.
+- **Fecha inválida:** usa exactamente el formato `AAAA-MM-DD`.
 - **No actualiza o elimina:** primero selecciona una fila de la tabla.
 - **No abre el JAR:** verifica que Java 17 esté instalado.
 

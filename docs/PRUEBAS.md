@@ -1,11 +1,11 @@
 # Pruebas unitarias
 
-Las pruebas están en `src/test/java/clarus/finance/CalculosFinanzasTest.java`.
+Las pruebas están en `test/clarus/finance/CalculosFinanzasTest.java`.
 
 ## Ejecutar
 
 ```bash
-mvn clean test
+ant clean test
 ```
 
 ## Pruebas

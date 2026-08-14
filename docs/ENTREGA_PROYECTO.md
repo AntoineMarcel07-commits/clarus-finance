@@ -1,6 +1,6 @@
 # Entrega del proyecto personal - Clarus Finance
 
-Versión 2.1.0 - 14 de agosto de 2026
+Versión 3.0.0
 
 Repositorio público:
 
@@ -8,17 +8,16 @@ Repositorio público:
 
 ## Descripción
 
-Clarus Finance es una aplicación de escritorio para registrar ingresos, gastos y presupuestos personales. Fue desarrollada con Java Swing, Maven y PostgreSQL. La intención es mantener una estructura sencilla, parecida a un proyecto de clase hecho en NetBeans.
+Clarus Finance es una aplicación de escritorio para registrar ingresos, gastos y presupuestos personales. Fue desarrollada con Java Swing, Ant, JFrame Forms de NetBeans y PostgreSQL. La estructura sigue el estilo sencillo de DocuSalud.
 
 ## 1. Principios SOLID y clean code
 
 - Las ventanas se encargan de mostrar y capturar información.
-- `ConexionBD` se encarga de abrir PostgreSQL y preparar las tablas.
+- `ClarusFinance` abre una sola conexión a PostgreSQL.
 - `CalculosFinanzas` contiene las reglas para ingresos, gastos, saldo y presupuestos.
 - `OperacionesCalculos` es una interfaz pequeña que evita depender directamente de una sola implementación.
 - Los métodos y variables tienen nombres descriptivos en español.
-- Las consultas que reciben datos usan `PreparedStatement`.
-- La contraseña de PostgreSQL no se guarda en el repositorio.
+- Las consultas usan `PreparedStatement` y la misma conexión.
 
 La explicación completa está en `docs/ARQUITECTURA.md`.
 
@@ -45,10 +44,11 @@ El desarrollo se guardó con Git. Las etiquetas principales son:
 - `v1.1.0` y `v1.2.0`: simplificación del proyecto.
 - `v2.0.0`: PostgreSQL, CRUD, dashboard y presupuestos.
 - `v2.1.0`: documento final de cumplimiento.
+- `v3.0.0`: proyecto Ant con JFrame Forms y base preparada desde pgAdmin.
 
 ## 4. Pruebas unitarias
 
-Las 9 pruebas están en `src/test/java/clarus/finance/CalculosFinanzasTest.java` y revisan:
+Las 9 pruebas están en `test/clarus/finance/CalculosFinanzasTest.java` y revisan:
 
 1. Total de ingresos.
 2. Total de gastos.
@@ -63,7 +63,7 @@ Las 9 pruebas están en `src/test/java/clarus/finance/CalculosFinanzasTest.java`
 Comando para ejecutarlas:
 
 ```bash
-mvn clean test
+ant clean test
 ```
 
 Resultado verificado: 9 pruebas ejecutadas, 0 fallos y 0 errores.

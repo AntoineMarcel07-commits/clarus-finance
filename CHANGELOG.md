@@ -1,5 +1,15 @@
 # Historial de cambios
 
+## 3.0.0
+
+- Proyecto cambiado a Ant, igual que DocuSalud.
+- Una sola conexión a PostgreSQL dentro de la clase principal.
+- Base y tablas creadas con dos scripts sencillos para pgAdmin.
+- Cuatro JFrame Forms editables desde la pestaña Design de NetBeans.
+- Maven, conexión extra y creación automática de tablas eliminados.
+- Pruebas cambiadas a JUnit 4.
+- Manual corregido sin fecha.
+
 ## 2.1.0 - 14 de agosto de 2026
 
 - Tabla de cumplimiento agregada al README.

@@ -3,6 +3,7 @@ package clarus.finance;
 import java.util.ArrayList;
 
 public interface OperacionesCalculos {
+
     double totalIngresos(ArrayList<Movimiento> movimientos);
 
     double totalGastos(ArrayList<Movimiento> movimientos);

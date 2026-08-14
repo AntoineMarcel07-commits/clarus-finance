@@ -1,8 +1,8 @@
 package clarus.finance;
 
 import java.util.ArrayList;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class CalculosFinanzasTest {
 
@@ -11,8 +11,7 @@ public class CalculosFinanzasTest {
         ArrayList<Movimiento> lista = new ArrayList<>();
         lista.add(crear("Ingreso", "Trabajo", 500));
         lista.add(crear("Ingreso", "Venta", 200));
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals(700, calculos.totalIngresos(lista));
+        assertEquals(700, new CalculosFinanzas().totalIngresos(lista), 0.01);
     }
 
     @Test
@@ -20,8 +19,7 @@ public class CalculosFinanzasTest {
         ArrayList<Movimiento> lista = new ArrayList<>();
         lista.add(crear("Gasto", "Comida", 100));
         lista.add(crear("Gasto", "Transporte", 20));
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals(120, calculos.totalGastos(lista));
+        assertEquals(120, new CalculosFinanzas().totalGastos(lista), 0.01);
     }
 
     @Test
@@ -29,8 +27,7 @@ public class CalculosFinanzasTest {
         ArrayList<Movimiento> lista = new ArrayList<>();
         lista.add(crear("Ingreso", "Trabajo", 500));
         lista.add(crear("Gasto", "Comida", 100));
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals(400, calculos.saldo(lista));
+        assertEquals(400, new CalculosFinanzas().saldo(lista), 0.01);
     }
 
     @Test
@@ -39,46 +36,45 @@ public class CalculosFinanzasTest {
         lista.add(crear("Gasto", "Comida", 100));
         lista.add(crear("Gasto", "Comida", 50));
         lista.add(crear("Gasto", "Transporte", 20));
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals(150, calculos.gastosPorCategoria(lista, "Comida"));
+        assertEquals(150,
+                new CalculosFinanzas().gastosPorCategoria(lista, "Comida"), 0.01);
     }
 
     @Test
     public void presupuestoDisponible() {
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals("Disponible", calculos.estadoPresupuesto(1000, 500));
+        assertEquals("Disponible",
+                new CalculosFinanzas().estadoPresupuesto(1000, 500));
     }
 
     @Test
     public void presupuestoCercaDelLimite() {
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals("Cerca del límite", calculos.estadoPresupuesto(1000, 850));
+        assertEquals("Cerca del límite",
+                new CalculosFinanzas().estadoPresupuesto(1000, 850));
     }
 
     @Test
     public void presupuestoExcedido() {
-        CalculosFinanzas calculos = new CalculosFinanzas();
-        assertEquals("Excedido", calculos.estadoPresupuesto(1000, 1100));
+        assertEquals("Excedido",
+                new CalculosFinanzas().estadoPresupuesto(1000, 1100));
     }
 
     @Test
     public void creaMovimiento() {
         Movimiento movimiento = crear("Gasto", "Comida", 150);
         assertEquals("Comida", movimiento.categoria);
-        assertEquals(150, movimiento.monto);
+        assertEquals(150, movimiento.monto, 0.01);
     }
 
     @Test
     public void creaPresupuesto() {
-        Presupuesto objPresupuesto = new Presupuesto();
-        Presupuesto presupuesto = objPresupuesto.InfoPresupuesto(1, "Comida", 1000);
+        Presupuesto presupuesto = new Presupuesto()
+                .InfoPresupuesto(1, "Comida", 1000);
         assertEquals("Comida", presupuesto.categoria);
-        assertEquals(1000, presupuesto.limite);
+        assertEquals(1000, presupuesto.limite, 0.01);
     }
 
     private Movimiento crear(String tipo, String categoria, double monto) {
-        Movimiento objMovimiento = new Movimiento();
-        return objMovimiento.InfoMovimiento(
-                1, "2026-08-14", tipo, categoria, "Prueba", monto);
+        return new Movimiento().InfoMovimiento(
+                1, "2026-01-10", tipo, categoria, "Prueba", monto);
     }
 }

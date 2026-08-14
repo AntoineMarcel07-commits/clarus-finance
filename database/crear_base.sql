@@ -1,5 +1,4 @@
--- Ejecuta esta instrucción una sola vez desde pgAdmin.
-CREATE DATABASE clarus_finance;
+-- 1. Abre pgAdmin y entra a la base postgres.
+-- 2. Abre Query Tool y ejecuta este archivo una sola vez.
 
--- Las tablas movimientos y presupuestos se crean automáticamente
--- cuando Clarus Finance se conecta por primera vez.
+CREATE DATABASE "ClarusFinance";

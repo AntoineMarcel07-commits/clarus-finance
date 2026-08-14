@@ -30,5 +30,6 @@ git tag --list
 - `v1.2.0`: edición de aula basada en el estilo de los otros proyectos de NetBeans.
 - `v2.0.0`: conexión PostgreSQL, CRUD, dashboard, presupuestos y manual actualizado.
 - `v2.1.0`: entrega académica con evidencias de SOLID, documentación, pruebas, versiones y PDF con el repositorio.
+- `v3.0.0`: versión sencilla de NetBeans Ant con una conexión, scripts de pgAdmin y JFrame Forms.
 
 Git guarda los cambios, GitHub publica el proyecto y cada etiqueta identifica una versión entregable.
