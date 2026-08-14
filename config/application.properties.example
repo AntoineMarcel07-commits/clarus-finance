@@ -1,4 +1,0 @@
-# Copia este archivo como application.properties y ajusta tus datos locales.
-db.url=jdbc:postgresql://localhost:5432/clarus_finance
-db.user=postgres
-db.password=CAMBIA_ESTA_CONTRASENA

@@ -1,7 +1,6 @@
 /target/
-/config/application.properties
+/datos/
 .DS_Store
 nbactions.xml
 nb-configuration.xml
 *.log
-*.csv

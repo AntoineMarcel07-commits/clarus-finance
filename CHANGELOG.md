@@ -1,34 +1,26 @@
 # Historial de cambios
 
-El proyecto usa versionado semántico: `MAYOR.MENOR.PARCHE`.
+## 1.1.0 - 13 de agosto de 2026
 
-## 1.0.0 - 2026-08-13
+- Proyecto reducido de 35 a 7 clases de producción.
+- Eliminados PostgreSQL, login, presupuestos y configuración externa.
+- Nueva interfaz de una sola ventana.
+- Guardado automático en CSV.
+- Suite reducida a 7 pruebas unitarias fáciles de explicar.
+- Manual e instalación actualizados.
 
-### Añadido
+## 1.0.0 - 13 de agosto de 2026
 
-- Documentación técnica, guía de pruebas y manual de usuario con instalación.
-- Entregables reproducibles: JAR ejecutable, ZIP y bundle Git.
+- Primera entrega documentada del proyecto.
 
-## 0.3.0 - 2026-08-13
+## 0.3.0
 
-### Añadido
+- Pruebas unitarias.
 
-- 18 pruebas unitarias para autenticación, movimientos, presupuestos, dashboard y PBKDF2.
+## 0.2.0
 
-### Corregido
+- Interfaz Swing.
 
-- Clasificación exacta de presupuestos excedidos por centavos.
+## 0.1.0
 
-## 0.2.0 - 2026-08-13
-
-### Añadido
-
-- Login, navegación, dashboard, CRUD de movimientos, CRUD de presupuestos y exportación CSV en Swing.
-
-## 0.1.0 - 2026-08-13
-
-### Añadido
-
-- Capas de dominio, aplicación e infraestructura.
-- Persistencia PostgreSQL y configuración externa.
-- Esquema inicial y datos de demostración.
+- Estructura inicial.

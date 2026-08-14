@@ -1,34 +1,29 @@
 # Pruebas unitarias
 
-## Ejecución verificada
+Las pruebas están en `FinanzasServicioTest.java` y no abren ventanas ni crean archivos. Usan una lista en memoria para probar únicamente la lógica.
 
-Fecha: 13 de agosto de 2026
-
-```text
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0
-BUILD SUCCESS
-```
-
-Comando reproducible:
+## Ejecutar
 
 ```bash
 mvn clean test
 ```
 
-## Alcance
+## Casos comprobados
 
-| Clase | Casos cubiertos |
-|---|---|
-| `AuthServiceTest` | acceso correcto, usuario normalizado, contraseña incorrecta, usuario ausente/inactivo y campos vacíos |
-| `MovementServiceTest` | alta, monto inválido, fecha futura, edición, edición inexistente, filtro mensual y eliminación |
-| `BudgetServiceTest` | avance saludable, advertencia al 80%, exceso exacto y validación |
-| `DashboardServiceTest` | ingresos, gastos, balance, uso del presupuesto y periodo vacío |
-| `Pbkdf2PasswordHasherTest` | salt distinto, verificación, contraseña incorrecta y hash malformado |
+1. Registra un ingreso.
+2. Registra un gasto.
+3. Calcula el saldo.
+4. Asigna ids consecutivos.
+5. Rechaza una descripción vacía.
+6. Rechaza un monto negativo.
+7. Elimina un movimiento.
 
-## Diseño de pruebas
+## Cómo leer una prueba
 
-Los tests usan implementaciones en memoria de las interfaces de repositorio. Por eso verifican reglas de negocio de forma rápida y determinista, sin requerir PostgreSQL ni interfaz gráfica. Las pruebas de persistencia quedan separadas como posible suite de integración futura.
+Cada prueba tiene tres pasos:
 
-## Defecto detectado
+1. Preparar los datos.
+2. Ejecutar un método del servicio.
+3. Comparar el resultado esperado con `assertEquals` o `assertThrows`.
 
-La primera ejecución detectó que `1000.01 / 1000` se redondeaba antes de clasificar el presupuesto. Se corrigió la regla para comparar directamente el gasto y el límite con `BigDecimal`. La prueba evita que el defecto vuelva a aparecer.
+Esto mantiene las pruebas pequeñas y fáciles de explicar.

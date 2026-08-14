@@ -1,106 +1,96 @@
 # Clarus Finance
 
-Aplicación de escritorio para administrar finanzas personales con Java Swing y PostgreSQL. Permite iniciar sesión, registrar ingresos y gastos, editar o eliminar movimientos, consultar un dashboard mensual, controlar presupuestos por categoría y exportar reportes CSV.
+Clarus Finance es una aplicación sencilla de escritorio hecha con Java Swing. Sirve para registrar ingresos y gastos, ver los totales y conocer el saldo disponible.
 
-## Repositorio
+Esta versión fue reducida a propósito para que el código sea fácil de leer, explicar y modificar. No necesita PostgreSQL, usuarios ni configuración externa: guarda los movimientos automáticamente en `datos/movimientos.csv`.
 
-URL preparada para publicación: <https://github.com/AntoineMarcel07-commits/clarus-finance>
+## Funciones
 
-> El proyecto incluye historial Git local y etiquetas de versión. Si la URL todavía no abre, consulta `docs/VERSIONADO.md` para publicarlo desde la cuenta correspondiente.
-
-## Funcionalidades
-
-- Inicio de sesión con contraseñas protegidas mediante PBKDF2.
-- Dashboard mensual de ingresos, gastos, balance y uso del presupuesto.
-- Alta, consulta, edición y eliminación de ingresos y gastos.
-- Presupuestos mensuales por categoría con estados disponible, por alcanzar y excedido.
-- Exportación de movimientos a CSV.
-- Creación automática del esquema y datos de demostración.
-- Configuración de base de datos externa al código.
-- 18 pruebas unitarias independientes de PostgreSQL.
+- Registrar un ingreso o un gasto.
+- Escribir descripción, categoría y monto.
+- Consultar todos los movimientos en una tabla.
+- Ver total de ingresos, gastos y saldo.
+- Eliminar un movimiento seleccionado.
+- Conservar los datos en un archivo local.
 
 ## Requisitos
 
 - JDK 17 o superior.
-- Apache Maven 3.9 o NetBeans con soporte Maven.
-- PostgreSQL 14 o superior.
+- NetBeans con soporte para Maven, o Maven 3.9.
 
-## Instalación rápida
+## Ejecutar en NetBeans
 
-1. Crea en PostgreSQL una base llamada `clarus_finance`. Puedes ejecutar `database/create_database.sql` desde pgAdmin.
-2. Copia `config/application.properties.example` como `config/application.properties`.
-3. Edita `application.properties` con tu usuario y contraseña de PostgreSQL.
-4. Abre esta carpeta desde **File > Open Project** en NetBeans.
-5. Ejecuta `com.clarusfinance.ClarusFinanceApp`.
+1. Descarga o descomprime el proyecto.
+2. Abre NetBeans.
+3. Selecciona **File > Open Project**.
+4. Elige la carpeta `ClarusFinance`.
+5. Espera a que Maven termine de cargar.
+6. Ejecuta `ClarusFinanceApp.java`.
 
-La primera ejecución crea las tablas y carga datos de demostración. Credenciales de la app:
+No hace falta instalar una base de datos.
 
-- Usuario: `admin`
-- Contraseña: `Clarus123!`
-
-La guía ilustrada y la solución de problemas están en `docs/Manual_Usuario_Clarus_Finance.pdf`.
-
-## Compilar y probar
+## Ejecutar desde terminal
 
 ```bash
-mvn clean test
-mvn package
+mvn clean package
 java -jar target/ClarusFinance.jar
 ```
 
-También puedes configurar sin archivo usando las variables `CLARUS_DB_URL`, `CLARUS_DB_USER` y `CLARUS_DB_PASSWORD`.
+## Pruebas unitarias
 
-## Arquitectura
-
-El proyecto separa responsabilidades en cuatro áreas:
-
-```text
-ui -> application -> domain
-             ^          ^
-             |          |
-       infrastructure --+
+```bash
+mvn test
 ```
 
-- `domain`: entidades y contratos, sin Swing ni JDBC.
-- `application`: casos de uso y reglas de negocio.
-- `infrastructure`: PostgreSQL, configuración y seguridad.
-- `ui`: ventanas, paneles y diálogos Swing.
+El proyecto tiene 7 pruebas sencillas para comprobar registros, totales, saldo, validaciones y eliminación.
 
-Esta organización aplica inversión de dependencias: los servicios conocen interfaces de repositorio y el arranque conecta las implementaciones JDBC. La explicación completa y la relación con SOLID están en `docs/ARQUITECTURA.md`.
-
-## Estructura
+## Estructura simple
 
 ```text
-ClarusFinance/
-├── config/
-├── database/
-├── docs/
-├── src/main/java/com/clarusfinance/
-│   ├── application/
-│   ├── domain/
-│   ├── infrastructure/
-│   └── ui/
-├── src/main/resources/db/
-├── src/test/java/
-└── pom.xml
+src/main/java/com/clarusfinance/
+├── ClarusFinanceApp.java
+├── modelo/
+│   ├── Movimiento.java
+│   └── TipoMovimiento.java
+├── datos/
+│   ├── MovimientoRepositorio.java
+│   └── ArchivoMovimientoRepositorio.java
+├── servicio/
+│   └── FinanzasServicio.java
+└── vista/
+    └── VentanaPrincipal.java
 ```
 
-## Versiones
+Solo existen 7 clases de producción:
 
-- `v0.1.0`: dominio, casos de uso y persistencia PostgreSQL.
-- `v0.2.0`: experiencia completa de escritorio Swing.
-- `v0.3.0`: pruebas unitarias y corrección de límites de presupuesto.
-- `v1.0.0`: documentación, manual y entrega estable.
+- `Movimiento`: contiene los datos de un movimiento.
+- `TipoMovimiento`: define ingreso o gasto.
+- `MovimientoRepositorio`: indica las operaciones para guardar datos.
+- `ArchivoMovimientoRepositorio`: guarda los datos en un CSV.
+- `FinanzasServicio`: valida y calcula los totales.
+- `VentanaPrincipal`: contiene la interfaz Swing.
+- `ClarusFinanceApp`: inicia el programa.
 
-Consulta `CHANGELOG.md` y `docs/VERSIONADO.md`.
+## SOLID explicado de forma sencilla
 
-## Seguridad y alcance
+- **S:** cada clase tiene una tarea principal.
+- **O:** se puede crear otra forma de guardar datos sin cambiar el servicio.
+- **L:** cualquier clase que cumpla `MovimientoRepositorio` puede reemplazar al archivo.
+- **I:** la interfaz solo pide tres operaciones pequeñas.
+- **D:** `FinanzasServicio` depende de la interfaz y no del archivo CSV.
 
-- `config/application.properties` está excluido de Git para evitar publicar contraseñas de PostgreSQL.
-- Las consultas usan `PreparedStatement`.
-- La contraseña de demostración no se almacena en texto plano.
-- Es una aplicación educativa de finanzas personales; no ofrece asesoría financiera ni sincronización bancaria.
+La explicación completa está en `docs/ARQUITECTURA.md`.
+
+## Documentación
+
+- Manual e instalación: `docs/Manual_Usuario_Clarus_Finance.pdf`
+- Arquitectura y SOLID: `docs/ARQUITECTURA.md`
+- Pruebas: `docs/PRUEBAS.md`
+- Versionado: `docs/VERSIONADO.md`
+- Cambios: `CHANGELOG.md`
+
+Repositorio: <https://github.com/AntoineMarcel07-commits/clarus-finance>
 
 ## Licencia
 
-MIT. Consulta `LICENSE`.
+MIT.

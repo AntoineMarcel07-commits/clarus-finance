@@ -1,89 +1,72 @@
-# Arquitectura y principios SOLID
+# Arquitectura sencilla y principios SOLID
 
-## Objetivo
+## Idea general
 
-Clarus Finance se diseñó como una aplicación de escritorio mantenible. La interfaz no ejecuta SQL ni decide reglas financieras; coordina casos de uso y muestra resultados.
-
-## Flujo de dependencias
+La aplicación se divide en partes pequeñas para que cada archivo tenga una tarea fácil de explicar:
 
 ```text
-Swing UI ──> Servicios de aplicación ──> Interfaces del dominio
-   ^                                          ^
-   |                                          |
-   └──────── Composición al iniciar ── Implementaciones JDBC
+VentanaPrincipal
+       |
+       v
+FinanzasServicio
+       |
+       v
+MovimientoRepositorio <--- ArchivoMovimientoRepositorio
+       |
+       v
+Movimiento
 ```
 
-`ClarusFinanceApp` es la raíz de composición: crea las dependencias concretas y las inyecta por constructor. Esto mantiene cada clase enfocada y hace posible probar servicios con repositorios en memoria.
+## Responsabilidad de cada parte
 
-## Capas
+### Modelo
 
-### Dominio
+`Movimiento` guarda id, fecha, tipo, categoría, descripción y monto. `TipoMovimiento` solo contiene las opciones `INGRESO` y `GASTO`.
 
-- Modelos inmutables: `Movement`, `Budget`, `BudgetProgress`, `DashboardSummary` y `UserAccount`.
-- Contratos: `MovementRepository`, `BudgetRepository` y `UserRepository`.
-- No importa Swing, JDBC ni PostgreSQL.
+### Datos
 
-### Aplicación
+`MovimientoRepositorio` declara tres acciones: listar, agregar y eliminar. `ArchivoMovimientoRepositorio` realiza esas acciones usando el archivo `datos/movimientos.csv`.
 
-- `AuthService`: autenticación y validación de credenciales.
-- `MovementService`: alta, edición, consulta y eliminación de movimientos.
-- `BudgetService`: presupuestos y cálculo exacto de avance.
-- `DashboardService`: totales mensuales y balance.
+### Servicio
 
-### Infraestructura
+`FinanzasServicio` valida los datos, asigna ids y calcula ingresos, gastos y saldo. No sabe cómo funciona el CSV.
 
-- Configuración desde archivo o variables de entorno.
-- `ConnectionFactory` abstrae la creación de conexiones.
-- Repositorios JDBC usan `PreparedStatement` y try-with-resources.
-- `DatabaseInitializer` aplica esquema y datos idempotentes.
-- `Pbkdf2PasswordHasher` protege contraseñas con salt aleatorio.
+### Vista
 
-### Presentación
+`VentanaPrincipal` muestra campos, botones, totales y una tabla. Cuando el usuario pulsa un botón, llama al servicio.
 
-- `LoginFrame` y `MainFrame` controlan el ciclo de sesión.
-- Paneles especializados para dashboard, movimientos y presupuestos.
-- Diálogos independientes para capturar datos.
-- Componentes de tema evitan colores, fuentes y estilos duplicados.
+### Inicio
 
-## Evidencia SOLID
+`ClarusFinanceApp` crea los objetos y abre la ventana.
+
+## SOLID sin complicarlo
 
 ### S - Responsabilidad única
 
-Cada servicio atiende un caso de uso. La persistencia, la seguridad, la configuración y la presentación viven en clases distintas.
+La ventana muestra información, el servicio calcula y el repositorio guarda. Ninguna clase intenta hacer todo.
 
-### O - Abierto/cerrado
+### O - Abierto y cerrado
 
-Un nuevo repositorio, por ejemplo SQLite o una API, puede implementar los contratos del dominio sin cambiar los servicios. Nuevas vistas consumen los mismos casos de uso.
+Podría agregarse una clase `BaseDatosMovimientoRepositorio` sin modificar `FinanzasServicio`.
 
 ### L - Sustitución de Liskov
 
-Las implementaciones JDBC y los repositorios en memoria de las pruebas respetan los mismos contratos y se sustituyen sin cambiar el comportamiento esperado de los servicios.
+Cualquier repositorio que implemente las tres operaciones puede usarse en lugar del repositorio de archivo.
 
 ### I - Segregación de interfaces
 
-Los contratos son pequeños y específicos. La autenticación no depende de operaciones de movimientos; cada repositorio expone únicamente lo necesario.
+La interfaz tiene únicamente las operaciones que la aplicación necesita.
 
 ### D - Inversión de dependencias
 
-Los servicios dependen de interfaces del dominio. Las clases JDBC dependen de esos mismos contratos y se conectan en la raíz de composición.
+El servicio recibe `MovimientoRepositorio` en su constructor. Por eso depende de una idea general y no directamente del CSV.
 
-## Clean code aplicado
+## Clean code usado
 
-- Nombres expresivos y clases pequeñas.
-- Modelos inmutables con validación de invariantes.
-- Sin estado global ni conexión pública compartida.
-- Dinero representado con `BigDecimal`, no `double`.
-- Fechas con `java.time`.
-- Recursos JDBC cerrados automáticamente.
-- Errores de negocio separados de errores de acceso a datos.
-- Credenciales de PostgreSQL fuera del repositorio.
-- Una única fuente de verdad para tema visual y formato monetario.
+- Nombres en español y relacionados con la función.
+- Métodos cortos como `registrar`, `saldo` y `eliminar`.
+- Validaciones en un solo lugar.
+- Constantes del tipo de movimiento en un `enum`.
+- Sin contraseñas ni datos privados dentro del código.
 
-## Esquema de datos
-
-- `schema_versions`: versión aplicada del esquema.
-- `app_users`: usuarios y hash de contraseña.
-- `movements`: ingresos y gastos.
-- `budgets`: límites mensuales únicos por categoría y periodo.
-
-Las restricciones de base de datos refuerzan las mismas invariantes del dominio: montos positivos, tipos válidos, periodos válidos y unicidad de presupuestos.
+El objetivo no es demostrar una arquitectura empresarial, sino aplicar buenas prácticas básicas en un proyecto que un estudiante pueda comprender completo.
