@@ -74,6 +74,16 @@ Hay 9 pruebas directas en `CalculosFinanzasTest.java`. No abren ventanas ni requ
 - Los nombres y métodos están en español y son fáciles de seguir.
 - La contraseña de PostgreSQL se pide al iniciar y no se versiona.
 
+## Cumplimiento de la entrega
+
+| Requisito | Evidencia dentro del proyecto |
+| --- | --- |
+| Principios SOLID y clean code | `OperacionesCalculos`, `CalculosFinanzas`, separación entre conexión, cálculos y ventanas, y explicación en `docs/ARQUITECTURA.md`. |
+| Documentación | `README.md`, manual de usuario, arquitectura, pruebas y guía de versionado. |
+| Versiones | Historial de Git, `CHANGELOG.md` y etiquetas desde `v0.1.0` hasta `v2.1.0`. |
+| Pruebas unitarias | 9 pruebas JUnit en `CalculosFinanzasTest.java`; se ejecutan con `mvn clean test`. |
+| PDF con el repositorio | `docs/Entrega_Proyecto_Clarus_Finance.pdf`. |
+
 ## Documentación
 
 - `docs/Manual_Usuario_Clarus_Finance.pdf`: manual completo e instalación.
@@ -81,6 +91,8 @@ Hay 9 pruebas directas en `CalculosFinanzasTest.java`. No abren ventanas ni requ
 - `docs/ARQUITECTURA.md`: explicación del código y SOLID.
 - `docs/PRUEBAS.md`: explicación de las pruebas.
 - `docs/VERSIONADO.md`: Git y versiones.
+- `docs/ENTREGA_PROYECTO.md`: resumen de cumplimiento de la actividad.
+- `docs/Entrega_Proyecto_Clarus_Finance.pdf`: PDF listo para subir a la plataforma.
 - `CHANGELOG.md`: historial de cambios.
 
 Repositorio: <https://github.com/AntoineMarcel07-commits/clarus-finance>

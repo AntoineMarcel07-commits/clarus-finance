@@ -1,5 +1,12 @@
 # Historial de cambios
 
+## 2.1.0 - 14 de agosto de 2026
+
+- Tabla de cumplimiento agregada al README.
+- Documento de entrega con evidencias de los requisitos solicitados.
+- PDF final con el enlace público del repositorio.
+- Historial y guía de versiones actualizados.
+
 ## 2.0.0 - 14 de agosto de 2026
 
 - Conexión real a PostgreSQL mediante JDBC.
