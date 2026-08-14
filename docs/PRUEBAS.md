@@ -1,6 +1,6 @@
 # Pruebas unitarias
 
-Las pruebas están en `FinanzasServicioTest.java` y no abren ventanas ni crean archivos. Usan una lista en memoria para probar únicamente la lógica.
+Las pruebas están en `src/test/java/clarus/finance/FinanzasTest.java`.
 
 ## Ejecutar
 
@@ -8,22 +8,16 @@ Las pruebas están en `FinanzasServicioTest.java` y no abren ventanas ni crean a
 mvn clean test
 ```
 
-## Casos comprobados
+## Pruebas
 
-1. Registra un ingreso.
-2. Registra un gasto.
-3. Calcula el saldo.
-4. Asigna ids consecutivos.
-5. Rechaza una descripción vacía.
-6. Rechaza un monto negativo.
-7. Elimina un movimiento.
+1. Agregar un ingreso.
+2. Agregar un gasto.
+3. Sumar ingresos.
+4. Sumar gastos.
+5. Calcular el saldo.
+6. Rechazar un monto negativo.
+7. Eliminar un movimiento.
 
-## Cómo leer una prueba
+Cada prueba crea un objeto `Finanzas`, llama a un método y compara el resultado con `assertEquals` o `assertNull`.
 
-Cada prueba tiene tres pasos:
-
-1. Preparar los datos.
-2. Ejecutar un método del servicio.
-3. Comparar el resultado esperado con `assertEquals` o `assertThrows`.
-
-Esto mantiene las pruebas pequeñas y fáciles de explicar.
+No se usan objetos falsos, repositorios, archivos temporales ni PostgreSQL.

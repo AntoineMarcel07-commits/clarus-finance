@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.clarusfinance</groupId>
+    <groupId>clarus.finance</groupId>
     <artifactId>clarus-finance</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>Clarus Finance</name>
     <description>Aplicación sencilla de escritorio para registrar ingresos y gastos.</description>
 
@@ -51,7 +51,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.clarusfinance.ClarusFinanceApp</mainClass>
+                            <mainClass>clarus.finance.ClarusFinance</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

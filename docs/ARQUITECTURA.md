@@ -1,72 +1,65 @@
-# Arquitectura sencilla y principios SOLID
+# Arquitectura básica
 
-## Idea general
-
-La aplicación se divide en partes pequeñas para que cada archivo tenga una tarea fácil de explicar:
+## Estructura
 
 ```text
+ClarusFinance
+      |
+      v
 VentanaPrincipal
-       |
-       v
-FinanzasServicio
-       |
-       v
-MovimientoRepositorio <--- ArchivoMovimientoRepositorio
-       |
-       v
-Movimiento
+      |
+      v
+OperacionesFinanzas
+      |
+      v
+Finanzas ----> ArrayList<Movimiento>
 ```
 
-## Responsabilidad de cada parte
+## Clases
 
-### Modelo
+### ClarusFinance
 
-`Movimiento` guarda id, fecha, tipo, categoría, descripción y monto. `TipoMovimiento` solo contiene las opciones `INGRESO` y `GASTO`.
+Es la clase `main`. Crea un objeto `Finanzas`, crea la ventana y la muestra. Sigue el mismo estilo usado en `AmazonMx`.
 
-### Datos
+### Movimiento
 
-`MovimientoRepositorio` declara tres acciones: listar, agregar y eliminar. `ArchivoMovimientoRepositorio` realiza esas acciones usando el archivo `datos/movimientos.csv`.
+Tiene campos públicos sencillos:
 
-### Servicio
+- `id`
+- `fecha`
+- `tipo`
+- `categoria`
+- `descripcion`
+- `monto`
 
-`FinanzasServicio` valida los datos, asigna ids y calcula ingresos, gastos y saldo. No sabe cómo funciona el CSV.
+El método `InfoMovimiento` crea y devuelve un movimiento. Es el mismo patrón usado en `InfoClientes`, `InfoPedidos` e `InfoProductos` de otros proyectos.
 
-### Vista
+### Finanzas
 
-`VentanaPrincipal` muestra campos, botones, totales y una tabla. Cuando el usuario pulsa un botón, llama al servicio.
+Contiene un `ArrayList<Movimiento>` y métodos directos para agregar, eliminar y calcular totales.
 
-### Inicio
+### OperacionesFinanzas
 
-`ClarusFinanceApp` crea los objetos y abre la ventana.
+Es una interfaz pequeña. Funciona como una lista de métodos que la clase `Finanzas` debe tener. Se conserva solamente para demostrar SOLID de forma sencilla.
 
-## SOLID sin complicarlo
+### VentanaPrincipal
 
-### S - Responsabilidad única
+Es un JFrame. Lee los campos cuando se pulsa **AGREGAR**, muestra el `ArrayList` en una tabla y llama a los métodos de `Finanzas`.
 
-La ventana muestra información, el servicio calcula y el repositorio guarda. Ninguna clase intenta hacer todo.
+## SOLID explicado fácil
 
-### O - Abierto y cerrado
+- **Responsabilidad única:** `Movimiento` guarda datos, `Finanzas` calcula y la ventana muestra.
+- **Abierto/cerrado:** se puede crear otra clase con las mismas operaciones sin cambiar la interfaz.
+- **Sustitución:** otra implementación de `OperacionesFinanzas` puede ocupar el lugar de `Finanzas`.
+- **Segregación:** la interfaz solo contiene las seis operaciones que usa la ventana.
+- **Inversión de dependencias:** la ventana recibe `OperacionesFinanzas` en el constructor.
 
-Podría agregarse una clase `BaseDatosMovimientoRepositorio` sin modificar `FinanzasServicio`.
+## Clean code
 
-### L - Sustitución de Liskov
+- Nombres sencillos en español.
+- Métodos cortos: `agregar`, `eliminar`, `saldo`.
+- Una sola lista de movimientos.
+- Validación simple del monto y los textos.
+- Sin contraseñas dentro del código.
 
-Cualquier repositorio que implemente las tres operaciones puede usarse en lugar del repositorio de archivo.
-
-### I - Segregación de interfaces
-
-La interfaz tiene únicamente las operaciones que la aplicación necesita.
-
-### D - Inversión de dependencias
-
-El servicio recibe `MovimientoRepositorio` en su constructor. Por eso depende de una idea general y no directamente del CSV.
-
-## Clean code usado
-
-- Nombres en español y relacionados con la función.
-- Métodos cortos como `registrar`, `saldo` y `eliminar`.
-- Validaciones en un solo lugar.
-- Constantes del tipo de movimiento en un `enum`.
-- Sin contraseñas ni datos privados dentro del código.
-
-El objetivo no es demostrar una arquitectura empresarial, sino aplicar buenas prácticas básicas en un proyecto que un estudiante pueda comprender completo.
+Esta arquitectura cumple la rúbrica sin intentar parecer un sistema profesional o empresarial.

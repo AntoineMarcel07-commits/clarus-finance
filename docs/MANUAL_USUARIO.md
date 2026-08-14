@@ -1,86 +1,71 @@
 # Clarus Finance - Manual de usuario e instalación
 
-Versión 1.1.0 - 13 de agosto de 2026
+Versión 1.2.0 - 14 de agosto de 2026
 
 ## 1. Descripción
 
-Clarus Finance es una aplicación escolar de escritorio para registrar ingresos y gastos personales. Muestra los movimientos en una tabla y calcula ingresos, gastos y saldo.
+Clarus Finance es una aplicación escolar de Java Swing. Permite agregar ingresos y gastos, mostrarlos en una tabla, eliminarlos y calcular el saldo.
 
 ## 2. Requisitos
 
-- Windows, macOS o Linux.
 - JDK 17 o superior.
-- NetBeans con soporte Maven, recomendado.
-- Aproximadamente 30 MB libres.
+- Apache NetBeans con Maven.
+- Windows, macOS o Linux.
 
-No necesita PostgreSQL ni otro programa de base de datos.
+No necesita PostgreSQL.
 
-## 3. Instalación en NetBeans
+## 3. Instalación
 
-1. Instala JDK 17 y NetBeans.
-2. Descarga y descomprime el proyecto.
-3. Abre NetBeans.
-4. Selecciona **File > Open Project**.
-5. Elige la carpeta `ClarusFinance`.
-6. Espera a que Maven cargue el proyecto.
-7. Abre `ClarusFinanceApp.java` y pulsa **Run File**.
+1. Descomprime el proyecto.
+2. Abre Apache NetBeans.
+3. Selecciona **File > Open Project**.
+4. Elige la carpeta `ClarusFinance`.
+5. Espera a que Maven termine de cargar.
+6. Ejecuta la clase `clarus.finance.ClarusFinance`.
 
-## 4. Instalación desde terminal
+## 4. Registrar un movimiento
 
-Abre una terminal dentro de la carpeta del proyecto y ejecuta:
+1. Escribe una descripción.
+2. Escribe una categoría.
+3. Selecciona `Ingreso` o `Gasto`.
+4. Escribe un monto mayor a cero.
+5. Pulsa **AGREGAR**.
 
-```bash
-mvn clean package
-java -jar target/ClarusFinance.jar
-```
+## 5. Eliminar
 
-## 5. Registrar un movimiento
+Selecciona una fila y pulsa **ELIMINAR**.
 
-1. Escribe una descripción, por ejemplo `Pago de trabajo`.
-2. Escribe una categoría, por ejemplo `Trabajo`.
-3. Elige `Ingreso` o `Gasto`.
-4. Escribe un monto mayor a cero, por ejemplo `500`.
-5. Pulsa **Agregar**.
+## 6. Totales
 
-El nuevo movimiento aparece en la tabla y los totales se actualizan.
+- Ingresos: suma los movimientos de tipo `Ingreso`.
+- Gastos: suma los movimientos de tipo `Gasto`.
+- Saldo: ingresos menos gastos.
 
-## 6. Eliminar un movimiento
+## 7. Datos temporales
 
-1. Selecciona una fila de la tabla.
-2. Pulsa **Eliminar seleccionado**.
-3. Confirma la eliminación.
+Los movimientos viven en un `ArrayList` mientras el programa está abierto. Al cerrar la aplicación, la lista se borra. Esto evita instalaciones y código de almacenamiento avanzado.
 
-## 7. Guardado automático
-
-Los datos se guardan en `datos/movimientos.csv`. La carpeta aparece después de registrar el primer movimiento. Al abrir de nuevo la aplicación, los datos se cargan automáticamente.
-
-Para empezar desde cero, cierra la aplicación y elimina únicamente ese archivo CSV.
-
-## 8. Ejecutar las pruebas
-
-En NetBeans usa **Test Project**. Desde una terminal ejecuta:
+## 8. Pruebas
 
 ```bash
 mvn clean test
 ```
 
-El resultado correcto indica 7 pruebas ejecutadas y 0 fallos.
+El resultado correcto muestra 7 pruebas y 0 fallos.
 
-## 9. Problemas comunes
+## 9. Explicación rápida
 
-- **NetBeans no abre el proyecto:** confirma que seleccionaste la carpeta que contiene `pom.xml`.
-- **Java no encontrado:** instala JDK 17 y selecciónalo en NetBeans.
-- **Monto inválido:** escribe solo números; puedes usar `150.50` o `150,50`.
-- **No elimina:** selecciona primero una fila.
-- **No guarda:** comprueba que la carpeta del proyecto permita crear archivos.
+- `Movimiento` guarda los datos.
+- `Finanzas` contiene el ArrayList y hace las cuentas.
+- `VentanaPrincipal` es el JFrame.
+- `ClarusFinance` abre el programa.
+- `OperacionesFinanzas` es la interfaz sencilla usada para demostrar SOLID.
 
-## 10. Explicación rápida para presentar
+## 10. Problemas comunes
 
-- `Movimiento` contiene los datos.
-- `VentanaPrincipal` muestra la interfaz.
-- `FinanzasServicio` valida y calcula.
-- `ArchivoMovimientoRepositorio` guarda el CSV.
-- La interfaz `MovimientoRepositorio` permite aplicar SOLID sin complicar el proyecto.
-- Las pruebas comprueban la lógica sin abrir la ventana.
+- Si no abre, revisa que NetBeans use JDK 17.
+- Si no agrega, completa todos los campos.
+- Si el monto falla, escribe únicamente números.
+- Si no elimina, selecciona primero una fila.
 
 Repositorio: <https://github.com/AntoineMarcel07-commits/clarus-finance>

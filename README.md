@@ -1,33 +1,32 @@
 # Clarus Finance
 
-Clarus Finance es una aplicación sencilla de escritorio hecha con Java Swing. Sirve para registrar ingresos y gastos, ver los totales y conocer el saldo disponible.
-
-Esta versión fue reducida a propósito para que el código sea fácil de leer, explicar y modificar. No necesita PostgreSQL, usuarios ni configuración externa: guarda los movimientos automáticamente en `datos/movimientos.csv`.
+Proyecto sencillo de Java Swing hecho con el mismo estilo de los proyectos básicos de NetBeans. Permite agregar ingresos y gastos, verlos en una tabla, eliminarlos y calcular el saldo.
 
 ## Funciones
 
-- Registrar un ingreso o un gasto.
+- Agregar un ingreso o gasto.
 - Escribir descripción, categoría y monto.
-- Consultar todos los movimientos en una tabla.
-- Ver total de ingresos, gastos y saldo.
-- Eliminar un movimiento seleccionado.
-- Conservar los datos en un archivo local.
+- Mostrar movimientos en una tabla.
+- Sumar ingresos y gastos.
+- Calcular el saldo.
+- Eliminar un movimiento.
+
+Los movimientos se guardan en un `ArrayList` mientras el programa está abierto. Al cerrar la aplicación, la lista empieza de nuevo. Esto mantiene el proyecto fácil de entender y presentar.
 
 ## Requisitos
 
 - JDK 17 o superior.
-- NetBeans con soporte para Maven, o Maven 3.9.
+- Apache NetBeans con soporte Maven.
 
-## Ejecutar en NetBeans
+No necesita PostgreSQL ni archivos de configuración.
 
-1. Descarga o descomprime el proyecto.
-2. Abre NetBeans.
-3. Selecciona **File > Open Project**.
-4. Elige la carpeta `ClarusFinance`.
-5. Espera a que Maven termine de cargar.
-6. Ejecuta `ClarusFinanceApp.java`.
+## Abrir en NetBeans
 
-No hace falta instalar una base de datos.
+1. Abre NetBeans.
+2. Selecciona **File > Open Project**.
+3. Elige la carpeta `ClarusFinance`.
+4. Espera a que Maven termine de cargar.
+5. Ejecuta `clarus.finance.ClarusFinance`.
 
 ## Ejecutar desde terminal
 
@@ -36,58 +35,51 @@ mvn clean package
 java -jar target/ClarusFinance.jar
 ```
 
-## Pruebas unitarias
+## Código principal
 
-```bash
-mvn test
-```
-
-El proyecto tiene 7 pruebas sencillas para comprobar registros, totales, saldo, validaciones y eliminación.
-
-## Estructura simple
+El programa tiene únicamente 5 archivos de producción:
 
 ```text
-src/main/java/com/clarusfinance/
-├── ClarusFinanceApp.java
-├── modelo/
+src/main/java/
+├── clarus/finance/
+│   ├── ClarusFinance.java
 │   ├── Movimiento.java
-│   └── TipoMovimiento.java
-├── datos/
-│   ├── MovimientoRepositorio.java
-│   └── ArchivoMovimientoRepositorio.java
-├── servicio/
-│   └── FinanzasServicio.java
-└── vista/
+│   ├── Finanzas.java
+│   └── OperacionesFinanzas.java
+└── Interfaces/
     └── VentanaPrincipal.java
 ```
 
-Solo existen 7 clases de producción:
+- `ClarusFinance`: crea los objetos y abre la ventana.
+- `Movimiento`: contiene campos públicos, igual que las clases de tus otros proyectos.
+- `Finanzas`: usa un `ArrayList` y realiza las operaciones.
+- `OperacionesFinanzas`: interfaz pequeña para demostrar SOLID.
+- `VentanaPrincipal`: JFrame con campos, tabla y botones.
 
-- `Movimiento`: contiene los datos de un movimiento.
-- `TipoMovimiento`: define ingreso o gasto.
-- `MovimientoRepositorio`: indica las operaciones para guardar datos.
-- `ArchivoMovimientoRepositorio`: guarda los datos en un CSV.
-- `FinanzasServicio`: valida y calcula los totales.
-- `VentanaPrincipal`: contiene la interfaz Swing.
-- `ClarusFinanceApp`: inicia el programa.
+## Pruebas unitarias
 
-## SOLID explicado de forma sencilla
+```bash
+mvn clean test
+```
 
-- **S:** cada clase tiene una tarea principal.
-- **O:** se puede crear otra forma de guardar datos sin cambiar el servicio.
-- **L:** cualquier clase que cumpla `MovimientoRepositorio` puede reemplazar al archivo.
-- **I:** la interfaz solo pide tres operaciones pequeñas.
-- **D:** `FinanzasServicio` depende de la interfaz y no del archivo CSV.
+Hay 7 pruebas directas en `FinanzasTest.java`. No usan base de datos ni abren ventanas.
 
-La explicación completa está en `docs/ARQUITECTURA.md`.
+## SOLID básico
+
+- **S:** cada clase tiene una tarea.
+- **O y L:** otra clase puede implementar `OperacionesFinanzas`.
+- **I:** la interfaz contiene solo las operaciones necesarias.
+- **D:** la ventana usa la interfaz en vez de depender directamente de `Finanzas`.
+
+No se usan repositorios, capas, patrones empresariales, seguridad avanzada ni archivos CSV.
 
 ## Documentación
 
-- Manual e instalación: `docs/Manual_Usuario_Clarus_Finance.pdf`
-- Arquitectura y SOLID: `docs/ARQUITECTURA.md`
-- Pruebas: `docs/PRUEBAS.md`
-- Versionado: `docs/VERSIONADO.md`
-- Cambios: `CHANGELOG.md`
+- `docs/Manual_Usuario_Clarus_Finance.pdf`: manual e instalación.
+- `docs/ARQUITECTURA.md`: explicación del código y SOLID.
+- `docs/PRUEBAS.md`: explicación de las pruebas.
+- `docs/VERSIONADO.md`: Git y versiones.
+- `CHANGELOG.md`: historial de cambios.
 
 Repositorio: <https://github.com/AntoineMarcel07-commits/clarus-finance>
 
